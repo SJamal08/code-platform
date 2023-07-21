@@ -1,24 +1,20 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import { useAppDispatch, useAppSelector } from './logic/store/store';
+import { getUser, login } from './logic/store/features/authSlice';
 
 function App() {
+
+  const user = useAppSelector(getUser);
+  const dispatch = useAppDispatch();
+
+  const loginUser = () => {
+    dispatch(login())
+  }
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>hello my friend: {user ? user.googleId : ""}</h1>
+      <button onClick={loginUser}>connect</button>
     </div>
   );
 }
