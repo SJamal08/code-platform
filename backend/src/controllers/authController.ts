@@ -8,7 +8,7 @@ import { Request, Response } from "express";
 const googleStrategy = new Strategy({
     clientID: variables.google_client_id,
     clientSecret: variables.google_client_secret,
-    callbackURL: 'http://localhost:5000/auth/google/callback'
+    callbackURL: 'http://localhost:5000/auth/google/callback',
 }, async (accessToken, refreshToken, profile, done) => {
     console.log("its works")
     const existingUser =  await User.findOne({googleId: profile.id});
@@ -17,7 +17,10 @@ const googleStrategy = new Strategy({
         done(null, existingUser);
     } else {
         const newUser =await new User({
-            googleId: profile.id
+            googleId: profile.id,
+            firstname: profile.name.givenName,
+            lastname: profile.name.familyName,
+            email: profile.emails[0].value,
         }).save(); 
         done(null, newUser);
     }
@@ -40,10 +43,12 @@ export const googleAuthenticate = passport.authenticate( 'google',{
     scope: ['profile', 'email']
 });
 
-export const googleCallBack = passport.authenticate('google');
+export const googleCallBack = passport.authenticate('google',{successRedirect:'http://localhost:3000?justloggedIn=5'});
 
 export const me = (req: Request, res: Response) => {
-    res.send(req.user);
+    const {user} = req;
+    console.log(user);
+    res.json(user);
 }
 
 export const logout = (req: Request, res: Response, next: any) => {
