@@ -19,7 +19,6 @@ class AuthRepository implements IAuthRepository {
         return request.data;
     }
     async loginWithGoogle(): Promise<Boolean | null> {
-        console.log("login in repo")
         // return new Promise<Boolean | null>((resolve, reject) => {
  
         // });
@@ -37,7 +36,6 @@ class AuthRepository implements IAuthRepository {
 
     async logout(): Promise<User | null> {
         const request = await axios.get('http://localhost:5000/auth/logout', config);
-        console.log("stp quelle valeur pour le logout ?", request.data);
         return request.data;
     }
     

@@ -26,7 +26,6 @@ function HomePage() {
       // return
     const condition = searchParams.get('justloggedIn') === "5";
     // settest(false);
-    console.log(condition)
     if (condition) {
       // Une fois le traitement terminé, envoyez un message à la page parent
       // Pour indiquer que le traitement est terminé
@@ -34,8 +33,7 @@ function HomePage() {
       console.log("message envoyé")
       window.close();
     }
-  }, [])
-  console.log(user)
+  }, [searchParams])
   return (
     <div className="App">
       <h1>hello my friend: {user ? user.googleId : ""}</h1>

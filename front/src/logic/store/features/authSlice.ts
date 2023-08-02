@@ -21,31 +21,12 @@ export const AuthSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        // login: (state, action: PayloadAction) => {
-        //     state.user = { id: 1, googleId: "jamal" }
-        //     console.log("login")
-        // },
         loginWithGoogle: (state, action: PayloadAction) => {
             authController.loginWithGoogle();
-            
-            // state.user = { id: 1, googleId: "jamal" }
-            // console.log("login")
         },
-        // getCurrentUser: (state, action: PayloadAction)=>{
-        //     authController.me().then(
-        //         user => {
-        //             console.log("get Current user", user)
-        //             state.user = user
-        //         }
-        //     );
-        // },
         setUser: (state, action: PayloadAction<User>) => {
             state.user = action.payload
         },
-        // logout: async (state, action: PayloadAction) => {
-        //     await authController.logout();
-        //     state.user = null
-        // },
     },
     extraReducers(builder) {
         builder.addCase(getCurrentUser.fulfilled, (state, action) => {

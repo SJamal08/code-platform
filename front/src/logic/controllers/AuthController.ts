@@ -8,7 +8,6 @@ class AuthController {
     }
 
     async loginWithGoogle() {
-        console.log("login in controller")
         await this.authRepository.loginWithGoogle();
         // return success;
     }
