@@ -1,5 +1,8 @@
 class GoogleAuthRepository implements IAuthRepository {
     constructor() {}
+    loginWithGoogle(): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
     login(): Promise<any> {
         throw new Error("Method not implemented.");
     }
@@ -8,7 +11,5 @@ class GoogleAuthRepository implements IAuthRepository {
     }
     me(): Promise<any> {
         throw new Error("Method not implemented.");
-    }
-
-    
+    }  
 }

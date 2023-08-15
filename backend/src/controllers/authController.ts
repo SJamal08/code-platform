@@ -21,6 +21,7 @@ const googleStrategy = new Strategy({
             firstname: profile.name.givenName,
             lastname: profile.name.familyName,
             email: profile.emails[0].value,
+            isAdmin: profile.emails[0].value === variables.admin_email ? true: false,
         }).save(); 
         done(null, newUser);
     }
@@ -30,9 +31,7 @@ passportService.useStrategy();
 
 passport.deserializeUser(async (id, done) => {
     const findUser = await User.findById(id);
-    if (findUser) {
-        done(null, findUser);
-    }
+    done(null, findUser);
 });
 
 passport.serializeUser((user, done) => {
@@ -52,16 +51,8 @@ export const me = (req: Request, res: Response) => {
 }
 
 export const logout = (req: Request, res: Response, next: any) => {
-    // req.logOut( function(err) {
-    //     if (err) {
-    //         // console.log(err)
-    //         return next(err)
-    //     };
-    //     res.redirect("/");
-    // });
     req.user = null;
     req.session = null;
     res.send(req.user);
+    console.log("logout done, req.user>>>", req.user)
 }
-
-

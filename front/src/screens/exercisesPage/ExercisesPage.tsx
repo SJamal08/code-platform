@@ -1,99 +1,41 @@
 import { Input, Option, Select } from '@material-tailwind/react'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import ExerciseCard from '../../components/ExerciseCard';
+import { useAppDispatch, useAppSelector } from '../../logic/store/store';
+import { getAllAnswers, getAllExercises, getAnswers, getExercises } from '../../logic/store/features/exerciseSlice';
+import { ExerciseAndAnswer } from '../../logic/models/Types';
 
 function ExercisesPage() {
 
-  const exercisesList = [
-    {
-      id: 0,
-      title: "titre banal",
-      isValidated: true,
-      acceptance: 75,
-      difficulty: "Medium",
-      status: "to-do"
-    },
-    {
-      id: 1,
-      title: "titre banal",
-      isValidated: true,
-      acceptance: 75,
-      difficulty: "Medium",
-      status: "to-do"
-    },
-    {
-      id: 2,
-      title: "titre banal",
-      isValidated: true,
-      acceptance: 75,
-      difficulty: "Medium",
-      status: "to-do"
-    },
-    {
-      id: 3,
-      title: "titre banal",
-      isValidated: true,
-      acceptance: 75,
-      difficulty: "Medium",
-      status: "to-do"
-    },
-    {
-      id: 4,
-      title: "titre banal",
-      isValidated: true,
-      acceptance: 75,
-      difficulty: "Medium",
-      status: "to-do"
-    },
-    {
-      id: 5,
-      title: "titre banal",
-      isValidated: true,
-      acceptance: 75,
-      difficulty: "Medium",
-      status: "to-do"
-    },
-    {
-      id: 6,
-      title: "titre banal",
-      isValidated: true,
-      acceptance: 75,
-      difficulty: "Medium",
-      status: "to-do"
-    },
-    {
-      id: 7,
-      title: "titre banal",
-      isValidated: true,
-      acceptance: 75,
-      difficulty: "Medium",
-      status: "to-do"
-    },
-    {
-      id: 8,
-      title: "titre banal",
-      isValidated: true,
-      acceptance: 75,
-      difficulty: "Medium",
-      status: "to-do"
-    },
-    {
-      id: 9,
-      title: "titre banal",
-      isValidated: true,
-      acceptance: 75,
-      difficulty: "Medium",
-      status: "to-do"
-    },
-    {
-      id: 10,
-      title: "titre banal",
-      isValidated: true,
-      acceptance: 75,
-      difficulty: "Medium",
-      status: "to-do"
-    },
-  ]
+  const dispatch = useAppDispatch();
+  const dbExercises = useAppSelector(getExercises);
+  const answers = useAppSelector(getAnswers);
+
+  const [coupleListExercises, setcoupleListExercises] = useState<ExerciseAndAnswer[]>([]);
+
+  useEffect(() => {
+   dispatch(getAllExercises());
+   dispatch(getAllAnswers()); 
+  }, [dispatch])
+
+  useEffect(() => {
+  const createCoupleList = () => {
+    const coupleList : ExerciseAndAnswer[] = [];
+
+    dbExercises.forEach(exercise => {
+      const answer = answers.find( answer => answer.idExercise === exercise._id);
+      const couple: ExerciseAndAnswer = {
+        exercise, answer
+      };
+      coupleList.push(couple);
+      setcoupleListExercises(coupleList);
+    });
+  };
+  createCoupleList();
+  }, [answers, dbExercises])
+  
+  console.log("mes couples en base",coupleListExercises);
+  
   return (
     <div className='flex h-full'>
       {/* left side */}
@@ -140,8 +82,8 @@ function ExercisesPage() {
           </div>
 
           {
-            exercisesList.map( exercise => (
-              <ExerciseCard exercise={exercise} />
+            coupleListExercises.map( (couple, index) => (
+              <ExerciseCard couple={couple}  index={index} />
             ))
           }
         </div>

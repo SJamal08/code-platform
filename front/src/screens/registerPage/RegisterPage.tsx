@@ -13,7 +13,6 @@ function RegisterPage() {
   const loginWithGoogleFunc = async () => {
       console.log("try google connexion")
         dispatch(loginWithGoogle());
-      // console.log(loginWithGoogle)
   }
   const user = useAppSelector(getUser);
 
@@ -41,7 +40,7 @@ function RegisterPage() {
      },
      validationSchema: yupSchema,
      onSubmit: values => {
-      console.log("hello formik")
+      console.log("hello formik");
      },
    });
 

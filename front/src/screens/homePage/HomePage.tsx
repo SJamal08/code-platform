@@ -1,14 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../logic/store/store';
-import { getCurrentUser, getUser } from '../../logic/store/features/authSlice';
+import { getUser } from '../../logic/store/features/authSlice';
 import { useSearchParams } from 'react-router-dom';
 
 function HomePage() {
     const dispatch = useAppDispatch();
-
-    useEffect(() => {
-      dispatch(getCurrentUser());
-    }, [dispatch]);
 
     const user = useAppSelector(getUser);
     

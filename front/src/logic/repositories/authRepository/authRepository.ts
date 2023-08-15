@@ -1,5 +1,5 @@
 import { User } from "../../models/User";
-import { IAuthRepository } from "../IAuthRepository";
+import { IAuthRepository } from "./IAuthRepository";
 import axios from 'axios';
 
 const config = {
@@ -12,16 +12,9 @@ const config = {
 class AuthRepository implements IAuthRepository {
     async me(): Promise<User | null > {
         const request = await axios.get("http://localhost:5000/auth/me", config);
-        // if (request.data) {
-        //     return request.data;
-        // }
-        // return null;
         return request.data;
     }
     async loginWithGoogle(): Promise<Boolean | null> {
-        // return new Promise<Boolean | null>((resolve, reject) => {
- 
-        // });
         try {
             const openType = "_blank";
             // const openType = "_self";

@@ -4,11 +4,12 @@ import cors from "cors";
 import mongoose from "mongoose";
 import cookieSession, {  } from "cookie-session";
 dotenv.config();
-import {authRouter} from'./routes/authRoutes';
+// import {authRouter} from'./routes/authRoutes';
+import authRouter from "./routes/authRoutes";
 import { variables } from './config/variables';
 import passport from 'passport';
-import next from 'next/types';
-
+import exerciseRouter from './routes/exerciseRoutes';
+import  answerExerciseRouter  from './routes/answerExerciseRoute';
 const app: Express = express();
 
 
@@ -29,9 +30,6 @@ app.use(
   })
 );
 
-app.use(passport.initialize());
-app.use(passport.session());
-
 try {
     mongoose.connect(variables.mongo_uri)  
     console.log("success connection with db")
@@ -39,12 +37,13 @@ try {
     console.log("big fail")
 }
 
-
 const port = process.env.PORT || 5000;
 
+app.use(passport.initialize());
+app.use(passport.session());
 app.use("/auth", authRouter);
-
-app.get("/hello", (req, res) => res.send("hello"));
+app.use("/exercise", exerciseRouter);
+app.use("/answerExercise", answerExerciseRouter);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Express + TypeScript Server');

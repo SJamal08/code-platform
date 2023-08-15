@@ -26,7 +26,7 @@ import {
   Bars2Icon,
 } from "@heroicons/react/24/outline";
   import { useAppDispatch, useAppSelector } from '../../logic/store/store';
-import { getUser, logout } from '../../logic/store/features/authSlice';
+import { authController, getUser, setUser } from '../../logic/store/features/authSlice';
 import { useNavigate } from 'react-router-dom';
  
 // profile menu component
@@ -87,8 +87,9 @@ function ProfileMenu() {
     }
   } 
 
-  const disconnectUser = () => {
-    dispatch(logout());
+  const disconnectUser = async () => {
+    const user = await authController.logout();
+    dispatch(setUser(user));
   }
  
   return (

@@ -1,10 +1,10 @@
-import { Request, Response, Router } from "express";
-import passport from "passport";
-import { Strategy } from "passport-google-oauth20";
-import { PassportService } from "../services/PassportService";
+import { Router } from "express";
 import * as authController from "../controllers/authController";
+import passport from "passport";
 
-export const authRouter = Router();
+const authRouter = Router();
+// authRouter.use(passport.initialize());
+// authRouter.use(passport.session());
 
 authRouter.get('/google/callback', authController.googleCallBack);
 
@@ -14,4 +14,4 @@ authRouter.get('/me', authController.me);
 
 authRouter.get('/logout', authController.logout);
 
-module.exports = {authRouter };
+export default authRouter
