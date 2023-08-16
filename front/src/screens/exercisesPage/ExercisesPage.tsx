@@ -2,39 +2,41 @@ import { Input, Option, Select } from '@material-tailwind/react'
 import React, { useEffect, useState } from 'react'
 import ExerciseCard from '../../components/ExerciseCard';
 import { useAppDispatch, useAppSelector } from '../../logic/store/store';
-import { getAllAnswers, getAllExercises, getAnswers, getExercises } from '../../logic/store/features/exerciseSlice';
+// import { getAllCouples } from '../../logic/store/features/exerciseSlice';
 import { ExerciseAndAnswer } from '../../logic/models/Types';
 
 function ExercisesPage() {
 
-  const dispatch = useAppDispatch();
-  const dbExercises = useAppSelector(getExercises);
-  const answers = useAppSelector(getAnswers);
+  const coupleListExercises = useAppSelector(state => state.exercises.coupleList);
 
-  const [coupleListExercises, setcoupleListExercises] = useState<ExerciseAndAnswer[]>([]);
+  // const dispatch = useAppDispatch();
+  // const dbExercises = useAppSelector(getExercises);
+  // const answers = useAppSelector(getAnswers);
 
-  useEffect(() => {
-   dispatch(getAllExercises());
-   dispatch(getAllAnswers()); 
-  }, [dispatch])
+  // const [coupleListExercises, setcoupleListExercises] = useState<ExerciseAndAnswer[]>([]);
 
-  useEffect(() => {
-  const createCoupleList = () => {
-    const coupleList : ExerciseAndAnswer[] = [];
+  // useEffect(() => {
+  //  dispatch(getAllExercises());
+  //  dispatch(getAllAnswers()); 
+  // }, [dispatch])
 
-    dbExercises.forEach(exercise => {
-      const answer = answers.find( answer => answer.idExercise === exercise._id);
-      const couple: ExerciseAndAnswer = {
-        exercise, answer
-      };
-      coupleList.push(couple);
-      setcoupleListExercises(coupleList);
-    });
-  };
-  createCoupleList();
-  }, [answers, dbExercises])
+  // useEffect(() => {
+  // const createCoupleList = () => {
+  //   const coupleList : ExerciseAndAnswer[] = [];
+
+  //   dbExercises.forEach(exercise => {
+  //     const answer = answers.find( answer => answer.idExercise === exercise._id);
+  //     const couple: ExerciseAndAnswer = {
+  //       exercise, answer
+  //     };
+  //     coupleList.push(couple);
+  //     setcoupleListExercises(coupleList);
+  //   });
+  // };
+  // createCoupleList();
+  // }, [answers, dbExercises])
   
-  console.log("mes couples en base",coupleListExercises);
+  // console.log("mes couples en base",coupleListExercises);
   
   return (
     <div className='flex h-full'>
@@ -83,7 +85,7 @@ function ExercisesPage() {
 
           {
             coupleListExercises.map( (couple, index) => (
-              <ExerciseCard couple={couple}  index={index} />
+              <ExerciseCard couple={couple}  index={index} key={index} />
             ))
           }
         </div>

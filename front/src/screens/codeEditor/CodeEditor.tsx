@@ -3,7 +3,7 @@ import  Editor  from '@monaco-editor/react';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import { useAppSelector } from '../../logic/store/store';
-import { answerExerciseController, getAnswerById, getAnswers, getExerciseById, getExercises } from '../../logic/store/features/exerciseSlice';
+import { answerExerciseController, getCoupleByExoId } from '../../logic/store/features/exerciseSlice';
 import { ExerciseAndAnswer } from '../../logic/models/Types';
 import Select from 'react-select';
 import { Button } from '@material-tailwind/react';
@@ -18,25 +18,23 @@ function CodeEditor() {
 
     const { id } = useParams();
 
-    const oneExercise = useAppSelector(state => getExerciseById(state, id!));
-    const oneAnswer = useAppSelector(state => getAnswerById(state, id!));
+    const couple = useAppSelector(state => getCoupleByExoId(state.exercises.coupleList, id!));
 
-    console.log(oneExercise);
-    console.log(oneAnswer);
-
-    const [couple, setCouple] = useState<ExerciseAndAnswer>({
-        exercise: oneExercise!,
-        answer: oneAnswer
-    })
+    // const [couple, setCouple] = useState<ExerciseAndAnswer>({
+    //     exercise: oneExercise!,
+    //     answer: oneAnswer
+    // })
 
     const [language, setLanguage] = useState("javascript");
 
-    const [code, setCode] = useState<string> (couple.answer?.codeBase.js || couple.exercise.codeBaseJs);
+    const [code, setCode] = useState<string | undefined> (couple?.answer?.codeBase.js || couple?.exercise.codeBaseJs);
 
     const [outPut, setOutPut] = useState("");
 
+
     useEffect(() => {
         const changeCodeBaseLanguage = () => {
+            if(!couple) return;
             let codeBase = "";
             switch (language) {
                 case "javascript":
@@ -72,15 +70,18 @@ function CodeEditor() {
       const submitCode = async () => {
         console.log("submit code");
         const payload: AnswerPayload = {
-            idExercise: couple.exercise._id as string,
+            idExercise: couple!.exercise._id as string,
             language: language,
-            codeSource: code
+            codeSource: code?? ""
         };
         console.log(payload);
         const data: any = await answerExerciseController.createAnswer(payload);
         console.log(data);
         setOutPut(data.output);
       }
+      if(!couple) {
+        return <p>loading...</p>
+    }
   return (
     <div className='flex flex-row h-full'>
         <div className='flex flex-col min-h-screen w-1/3 bg-gray-500'>

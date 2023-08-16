@@ -2,21 +2,24 @@ import React, { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../logic/store/store';
 import { getUser } from '../../logic/store/features/authSlice';
 import { useSearchParams } from 'react-router-dom';
+import { getAllCouples} from '../../logic/store/features/exerciseSlice';
+import { ExerciseAndAnswer } from '../../logic/models/Types';
 
 function HomePage() {
-    const dispatch = useAppDispatch();
-
-    const user = useAppSelector(getUser);
+    // const dispatch = useAppDispatch();
     
-  // const loginUser = () => {
-  //   dispatch(getCurrentUser())
-  // }
+    // useEffect(() => {
+    //  dispatch(getAllCouples());
+    // }, [dispatch])
+  
+    // useEffect(() => {
+
+    // }, [answers, dbExercises])
+    
+    const user = useAppSelector(getUser);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  // const [test, settest] = useState(true)
-  // return (
-  // )
   useEffect(() => {
     // if(!test)
       // return
@@ -30,6 +33,7 @@ function HomePage() {
       window.close();
     }
   }, [searchParams])
+
   return (
     <div className="App">
       <h1>hello my friend: {user ? user.googleId : ""}</h1>

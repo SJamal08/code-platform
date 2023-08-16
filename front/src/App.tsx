@@ -4,6 +4,7 @@ import { useAppDispatch } from './logic/store/store';
 import { authController, setUser } from './logic/store/features/authSlice';
 
 import AppRouter from './Router';
+import { getAllCouples } from './logic/store/features/exerciseSlice';
 
 function App() {
 
@@ -13,7 +14,10 @@ const [loading, setloading] = useState(true);
   useEffect(() => {
     const loadUser = async () => {
     const user = await authController.me();
-    dispatch(setUser(user));
+    if(user) {
+      dispatch(setUser(user));
+      dispatch(getAllCouples());
+    }
     setloading(false);
     };
     

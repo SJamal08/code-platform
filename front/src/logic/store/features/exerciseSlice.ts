@@ -6,18 +6,21 @@ import { RootState } from "../store";
 import { AnswerExercise } from "../../models/AnswerExercise";
 import { AnswerExerciseController } from "../../controllers/AnswerExerciseController";
 import { AnswerPayload } from "../../repositories/AnswerExerciseRepository/IAnswerExerciseRepository";
+import { ExerciseAndAnswer } from "../../models/Types";
 
 export const exerciseController = new ExerciseController();
 export const answerExerciseController = new AnswerExerciseController();
 
 interface ExerciseState {
-    exercisesList: Exercise[];
-    answerList: AnswerExercise[];
+    // exercisesList: Exercise[];
+    // answerList: AnswerExercise[];
+    coupleList: ExerciseAndAnswer[];
 }
 
 const initialState: ExerciseState = {
-    exercisesList: [],
-    answerList: [],
+    // exercisesList: [],
+    // answerList: [],
+    coupleList: [],
 }
 
 export const ExerciseSlice = createSlice({
@@ -30,35 +33,48 @@ export const ExerciseSlice = createSlice({
     },
     extraReducers(builder) {
         builder
-        .addCase(getAllExercises.fulfilled, (state, action) => {
-            state.exercisesList = action.payload;
-        })
-        .addCase(getAllAnswers.fulfilled, (state, action) => {
-            state.answerList = action.payload;
+        .addCase(getAllCouples.fulfilled, (state, action) => {
+            state.coupleList = action.payload;
         })
     }
 })
 
-export const getAllExercises = createAsyncThunk('exercise/getAllExercises', async () =>{
+// export const getAllExercises = createAsyncThunk('exercise/getAllExercises', async () =>{
+//     const exercises = await exerciseController.getAllExercise();
+//     return exercises;
+// });
+// export const getAllAnswers = createAsyncThunk('answer/getAllAnswers', async () =>{
+//     const answers = await answerExerciseController.getAllAnswerForOneUser();
+//     return answers;
+// });
+
+export const getAllCouples = createAsyncThunk('couple/getAll', async () =>{
     const exercises = await exerciseController.getAllExercise();
-    return exercises;
+    const answers = await answerExerciseController.getAllAnswerForOneUser();
+    const coupleList: ExerciseAndAnswer[] = [];
+    exercises.forEach(exercise => {
+        const answer = answers.find( answer => answer.idExercise === exercise._id);
+        const couple: ExerciseAndAnswer = {
+          exercise, answer
+        };
+        coupleList.push(couple);
+      });
+      console.log(coupleList)
+    return coupleList;
 });
 
 export const createExercise = createAsyncThunk('exercise/createExercise', async (exercise: ExercisePayload) =>{
     await exerciseController.createExercise(exercise);
 });
 
-export const getAllAnswers = createAsyncThunk('answer/getAllAnswers', async () =>{
-    const answers = await answerExerciseController.getAllAnswerForOneUser();
-    return answers;
-});
 
 export const createAnswer = createAsyncThunk('answer/createAnswer', async (answer: AnswerPayload) =>{
     await answerExerciseController.createAnswer(answer);
 });
 
 export default ExerciseSlice.reducer;
-export const getExercises = (state: RootState) => state.exercises.exercisesList;
-export const getAnswers = (state: RootState) => state.exercises.answerList;
-export const getExerciseById = (state: RootState, id: string) => state.exercises.exercisesList.find(exercise => exercise._id === id);
-export const getAnswerById = (state: RootState, id: string) => state.exercises.answerList.find(answer => answer.idExercise === id);
+export const getCoupleList = (state: RootState) => state.exercises.coupleList;
+// export const getAnswers = (state: RootState) => state.exercises.answerList;
+// export const getCoupleByExoId = (state: RootState, id: string) => state.exercises.coupleList.find(exerciseAndAnswer => exerciseAndAnswer.exercise._id === id);
+export const getCoupleByExoId = (coupleList: ExerciseAndAnswer[], id: string) => coupleList.find(couple => couple.exercise._id === id);
+// export const getAnswerById = (state: RootState, id: string) => state.exercises.answerList.find(answer => answer.idExercise === id);
