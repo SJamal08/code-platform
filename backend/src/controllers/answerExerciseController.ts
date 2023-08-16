@@ -19,8 +19,11 @@ export const create = async (req: Request, res: Response) => {
     const fileName = exerciseResult.title.replace(/ /g, '_');
     const compilation = await compileAndExecute(answer.codeSource, fileName, answer.language);
 
-    const success = await answerExerciseRepository.postOrUpdate(answer, idUser, existedAnswerResult, compilation);
-    res.status(201).json(compilation);
+    const newAnswer = await answerExerciseRepository.postOrUpdate(answer, idUser, existedAnswerResult, compilation);
+    const result = {
+        compilation, newAnswer
+    }
+    res.status(201).json(result);
 };
 
 export const getAll = async (req: Request, res: Response) => {

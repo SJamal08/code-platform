@@ -6,7 +6,7 @@ class AnswerExerciseRepository implements IAnswerExerciseRepository {
     constructor() {
     }
 
-    async postOrUpdate(answer: AnswerExercisePayload, idUser: string, existedAnswer: any, compilation: any): Promise<boolean> { 
+    async postOrUpdate(answer: AnswerExercisePayload, idUser: string, existedAnswer: any, compilation: any): Promise<any> { 
         if (existedAnswer) {
             console.log("reponse deja existante")
             if (answer.language === "javascript") {
@@ -18,7 +18,7 @@ class AnswerExerciseRepository implements IAnswerExerciseRepository {
             }
             existedAnswer.status= compilation.err ? "in progress":  "done";
             console.log(existedAnswer)
-            await AnswerExercise.findOneAndUpdate({idExercise: existedAnswer.idExercise, idUser: existedAnswer.idUser}, existedAnswer);
+            return await AnswerExercise.findOneAndUpdate({idExercise: existedAnswer.idExercise, idUser: existedAnswer.idUser}, existedAnswer);
         } else {
             let codeBase: codeBase = {};
             let isValidated: isValidated = {};
@@ -46,9 +46,8 @@ class AnswerExerciseRepository implements IAnswerExerciseRepository {
                 isValidated,
                 status: compilation.err ? "in progress":  "done"
             }  
-            const  postAnswer = await new AnswerExercise(newAnswer).save();
+            return await new AnswerExercise(newAnswer).save();
         }
-        return false;
     }
     async getAllAnswersForOneUser(idUser: string): Promise<typeof AnswerExercise[]> {
         console.log(idUser);
@@ -63,14 +62,14 @@ class AnswerExerciseRepository implements IAnswerExerciseRepository {
         return null;
     }
 
-    async update(_id: string, newAnswer: AnswerExercisePayload): Promise<boolean> {
-        try {
-            const updatedAnswer = await AnswerExercise.updateOne({_id}, newAnswer);
-            return true; 
-        } catch (error) {
-            return false;
-        }
-    }
+    // async update(_id: string, newAnswer: AnswerExercisePayload): Promise<boolean> {
+    //     try {
+    //         const updatedAnswer = await AnswerExercise.updateOne({_id}, newAnswer);
+    //         return true; 
+    //     } catch (error) {
+    //         return false;
+    //     }
+    // }
     async delete(_id: string): Promise<boolean> {
         try {
             const deletedAnswer = await AnswerExercise.findByIdAndDelete(_id);
