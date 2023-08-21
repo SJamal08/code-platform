@@ -52,7 +52,7 @@ function CreateExercise() {
       <h2>Créer un exercice</h2>
       <div className="flex w-72 flex-col items-center gap-6 ">
         <form className="flex w-72 flex-col items-center gap-6 " onSubmit={formik.handleSubmit}>
-          <Input label="Title" name="title" value={formik.values.title} onChange={formik.handleChange} />
+          <Input label="Title" name="title" value={formik.values.title} onChange={formik.handleChange} crossOrigin={undefined} />
           <Textarea rows={10} label="Description" name="description" size="lg" value={formik.values.description} onChange={formik.handleChange} />
           <Select
             styles={customStyles}

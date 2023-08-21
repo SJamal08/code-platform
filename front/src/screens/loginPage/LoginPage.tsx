@@ -20,12 +20,10 @@ function LoginPage() {
         <h2 className="">Connexion</h2>
 
         <div className="flex w-72 flex-col items-end gap-6">
-            <Input label="email" 
-            // error
+            <Input label="email" crossOrigin={undefined}            // error
             // success
             />
-            <Input label="mot de passe" 
-            // error
+            <Input label="mot de passe" crossOrigin={undefined}            // error
             // success
              />
             <div className="">

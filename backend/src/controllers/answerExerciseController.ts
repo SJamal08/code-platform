@@ -30,7 +30,7 @@ export const getAll = async (req: Request, res: Response) => {
     // const user = req.user;
     // const {user} = req;
     const user = req.user as Document;
-    const _id = user._id;
+    const _id = user?._id;
     const answers = await answerExerciseRepository.getAllAnswersForOneUser(_id);
     res.json(answers);
 };

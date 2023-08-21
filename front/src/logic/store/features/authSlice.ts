@@ -30,10 +30,6 @@ export const AuthSlice = createSlice({
     }
 });
 
-// export const logout = createAsyncThunk('auth/logout', async () => {
-//     const user = await authController.logout();
-//     return user;
-// })
 export default AuthSlice.reducer;
 export const { loginWithGoogle, setUser } = AuthSlice.actions;
 export const getUser = (state: RootState) => state.auth.user;

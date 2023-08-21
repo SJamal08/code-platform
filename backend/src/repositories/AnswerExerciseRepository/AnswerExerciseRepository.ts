@@ -8,7 +8,6 @@ class AnswerExerciseRepository implements IAnswerExerciseRepository {
 
     async postOrUpdate(answer: AnswerExercisePayload, idUser: string, existedAnswer: any, compilation: any): Promise<any> { 
         if (existedAnswer) {
-            console.log("reponse deja existante")
             if (answer.language === "javascript") {
                 existedAnswer.codeBase.js = answer.codeSource;
                 existedAnswer.isValidated.js = !compilation.err;
@@ -17,8 +16,7 @@ class AnswerExerciseRepository implements IAnswerExerciseRepository {
                 existedAnswer.isValidated.py = !compilation.err;
             }
             existedAnswer.status= compilation.err ? "in progress":  "done";
-            console.log(existedAnswer)
-            return await AnswerExercise.findOneAndUpdate({idExercise: existedAnswer.idExercise, idUser: existedAnswer.idUser}, existedAnswer);
+            return await AnswerExercise.findOneAndUpdate({idExercise: existedAnswer.idExercise, idUser: existedAnswer.idUser}, existedAnswer, {returnDocument: "after"});
         } else {
             let codeBase: codeBase = {};
             let isValidated: isValidated = {};

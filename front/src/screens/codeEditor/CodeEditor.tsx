@@ -2,12 +2,13 @@ import { ChevronDoubleLeftIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroi
 import  Editor  from '@monaco-editor/react';
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import { useAppSelector } from '../../logic/store/store';
-import { answerExerciseController, getCoupleByExoId } from '../../logic/store/features/exerciseSlice';
-import { ExerciseAndAnswer } from '../../logic/models/Types';
+import { useAppDispatch, useAppSelector } from '../../logic/store/store';
+import { answerExerciseController, getCoupleByExoId, setCoupleInList } from '../../logic/store/features/exerciseSlice';
 import Select from 'react-select';
 import { Button } from '@material-tailwind/react';
 import { AnswerPayload } from '../../logic/repositories/AnswerExerciseRepository/IAnswerExerciseRepository';
+import { ExerciseAndAnswer } from '../../logic/models/Types';
+import { AnswerExercise } from '../../logic/models/AnswerExercise';
 
 function CodeEditor() {
 
@@ -18,12 +19,9 @@ function CodeEditor() {
 
     const { id } = useParams();
 
-    const couple = useAppSelector(state => getCoupleByExoId(state.exercises.coupleList, id!));
+    const dispatch = useAppDispatch();
 
-    // const [couple, setCouple] = useState<ExerciseAndAnswer>({
-    //     exercise: oneExercise!,
-    //     answer: oneAnswer
-    // })
+    let couple = useAppSelector(state => getCoupleByExoId(state.exercises.coupleList, id!));
 
     const [language, setLanguage] = useState("javascript");
 
@@ -74,17 +72,22 @@ function CodeEditor() {
             language: language,
             codeSource: code?? ""
         };
-        console.log(payload);
         const data: any = await answerExerciseController.createAnswer(payload);
         console.log(data);
-        setOutPut(data.output);
+        const newCouple: ExerciseAndAnswer = {
+            exercise: couple!.exercise,
+            answer: data.newAnswer
+        };
+        console.log("new couple",newCouple);
+        dispatch(setCoupleInList(newCouple));
+        setOutPut(data.compilation.output);
       }
       if(!couple) {
         return <p>loading...</p>
     }
   return (
-    <div className='flex flex-row h-full'>
-        <div className='flex flex-col min-h-screen w-1/3 bg-gray-500'>
+    <div className='flex w-full h-screen'>
+        <div className='flex flex-col md:w-1/3'>
             <div className='flex flex-row justify-between'>
                 <h2>Exercice: {couple.exercise.title}</h2>
                 <Select
@@ -94,21 +97,23 @@ function CodeEditor() {
                     placeholder="javascript"
                     onChange={ selectedOption => setLanguage(selectedOption!.value)}
                 />
-                <div className='flex flex-row'>
+                {/* <div className='flex flex-row'>
                     <ChevronLeftIcon strokeWidth={7} className="h-3 w-3"/>
                     <ChevronRightIcon  strokeWidth={7} className="h-3 w-3"/>
-                </div>
+                </div> */}
             </div>
             <p> {couple.exercise.description} </p>
         </div>
-        <div className='flex flex-col min-h-screen w-2/3 bg-gray-300'>
-            <Editor height="70vh" language={language} value={code} theme='vs-dark' onChange={handleEditorChange}/>
-            <div className='w-full h-1/3 bg-gray-900 flex flex-col'>
+        <div className='hidden flex-col md:flex w-2/3 h-screen'>
+            <div>
+                <Editor height="80vh" language={language} value={code} theme='vs-dark' onChange={handleEditorChange}/>
+            </div>
+            <div className='flex flex-col'>
                 <div className='flex flex-row justify-between'>
                     console space
                     <Button  onClick={submitCode}>Confirmer</Button>
                 </div>
-                <div>
+                <div className=''>
                     <p>
                         {outPut}
                     </p>

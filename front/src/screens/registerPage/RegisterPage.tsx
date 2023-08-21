@@ -51,22 +51,18 @@ return (
 
       <div className="flex w-72 flex-col items-center gap-6">
         <form className="flex w-72 flex-col items-center gap-6" onSubmit={formik.handleSubmit}>
-          <Input label="prénom" name='firstname' value={formik.values.firstname} onChange={formik.handleChange} onBlur={formik.handleBlur} error={formik.errors.firstname ? true : false}
-
+          <Input label="prénom" name='firstname' value={formik.values.firstname} onChange={formik.handleChange} onBlur={formik.handleBlur} error={formik.errors.firstname ? true : false} crossOrigin={undefined}
             />
             <small>{formik.errors.firstname}</small>
               {!!formik.errors.firstname}  
-            <Input label="nom" name='lastname' value={formik.values.lastname} onChange={formik.handleChange} onBlur={formik.handleBlur} error={formik.errors.lastname ? true : false}
-
+            <Input label="nom" name='lastname' value={formik.values.lastname} onChange={formik.handleChange} onBlur={formik.handleBlur} error={formik.errors.lastname ? true : false} crossOrigin={undefined}
              />
              <small>{formik.errors.lastname}</small>
               {!!formik.errors.lastname}  
-            <Input label="email" name='email' value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} error={formik.errors.email ? true : false}
-            />
+            <Input label="email" name='email' value={formik.values.email} onChange={formik.handleChange} onBlur={formik.handleBlur} error={formik.errors.email ? true : false} crossOrigin={undefined}            />
             <small>{formik.errors.email}</small>
               {!!formik.errors.email}  
-            <Input label="mot de passe" name='password' value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} error={formik.errors.password ? true : false}
-             />
+            <Input label="mot de passe" name='password' value={formik.values.password} onChange={formik.handleChange} onBlur={formik.handleBlur} error={formik.errors.password ? true : false} crossOrigin={undefined}             />
              <small>{formik.errors.password}</small>
               {!!formik.errors.password}  
             {/* <Input label="confirmation du mot de passe" name='passwordValidation'

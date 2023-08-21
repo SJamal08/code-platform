@@ -70,7 +70,7 @@ function ExercisesPage() {
             </Select>
           </div>
           <div className="w-full">
-            <Input label="Input With Icon" icon={<i className="fas fa-heart" />} />
+            <Input label="Input With Icon" icon={<i className="fas fa-heart" />} crossOrigin={undefined} />
           </div>
         </div>
         {/* display exercises list */}
